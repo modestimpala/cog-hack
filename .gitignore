@@ -1,0 +1,24 @@
+# build output (make clean)
+/build/
+*.o
+*.a
+*.dll
+*.exe
+
+# third-party SDK: fetched and checksum-verified by `make deps` (tools/fetch_angelscript.sh)
+/third_party/
+
+# memory snapshots: they contain process memory, never commit
+*.dmp
+snapshots/
+
+# personal RE notes and tables extracted from the game (docs/rederive.md says how to regenerate them)
+/notes/
+
+# python / editors
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+*.swp
+.cache/

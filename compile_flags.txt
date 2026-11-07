@@ -1,0 +1,11 @@
+--target=i686-w64-mingw32
+-isystem/usr/lib/gcc/i686-w64-mingw32/16.2.0/../../../../i686-w64-mingw32/include/c++/16.2.0
+-isystem/usr/lib/gcc/i686-w64-mingw32/16.2.0/../../../../i686-w64-mingw32/include/c++/16.2.0/i686-w64-mingw32
+-isystem/usr/lib/gcc/i686-w64-mingw32/16.2.0/../../../../i686-w64-mingw32/include/c++/16.2.0/backward
+-isystem/usr/i686-w64-mingw32/include
+-Iinclude
+-Isrc
+-Ibuild
+-Ithird_party/sdk/angelscript/include
+-Ithird_party/sdk/add_on
+-DCM_HOST
