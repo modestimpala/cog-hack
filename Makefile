@@ -20,12 +20,12 @@ HOOKED   := SDL_PollEvent SDL_Flip SDL_UpdateRect SDL_SetVideoMode
 
 # HOOK_SRC needs a live SDL (the real SDL_orig.dll); everything else also links into the test exes
 HOOK_SRC := src/hook/hook.c src/hook/hotkeys.c src/overlay/overlay.c src/overlay/font.c \
-            src/overlay/backing.c src/debug/snapshot.c
+            src/overlay/backing.c src/overlay/intro.c src/overlay/title.c src/debug/snapshot.c src/debug/record.c
 CORE_SRC := $(filter-out $(HOOK_SRC),$(wildcard src/*/*.c src/*/*.cpp))
 obj       = $(patsubst src/%,$(B)/obj/%.o,$(basename $(1)))
 HOOK_OBJ := $(call obj,$(HOOK_SRC))
 CORE_OBJ := $(call obj,$(CORE_SRC))
-HEADERS  := $(wildcard src/*/*.h include/*.h) $(B)/sigs_builtin.inc
+HEADERS  := $(wildcard src/*/*.h include/*.h) $(B)/sigs_builtin.inc $(B)/title_art.inc
 
 AS_ADDONS := scriptstdstring/scriptstdstring.cpp scriptstdstring/scriptstdstring_utils.cpp \
              scriptarray/scriptarray.cpp scriptbuilder/scriptbuilder.cpp scripthelper/scripthelper.cpp \
@@ -50,6 +50,11 @@ $(SDK)/angelscript/include/angelscript.h:
 $(B)/sigs_builtin.inc: sigs/cogmind.sigs tools/embed_text.py
 	@mkdir -p $(B)
 	python3 tools/embed_text.py $< $@
+
+# the title art (src/overlay/title.c includes this)
+$(B)/title_art.inc: art/coghack.txt tools/title_art.py
+	@mkdir -p $(B)
+	python3 tools/title_art.py $< $@
 
 $(B)/obj/%.o: src/%.c $(HEADERS)
 	@mkdir -p $(dir $@)

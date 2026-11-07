@@ -194,6 +194,17 @@ enum item_type {
 #define CELL_GLYPH           0x08         // u32 index into the font sheet
 #define CELL_FG              0x0c         // r,g,b bytes
 #define CELL_BG              0x0f         // r,g,b bytes (right after fg; +0x12 is padding)
+#define CELL_IS_TRANSPARENT(bg) ((bg)[0] == 255 && (bg)[1] == 0 && (bg)[2] == 255)   // REXPaint's "not painted" (docs/art.md)
+
+// ---- title screen and boot sequence (docs/art.md; src/overlay/title.c, intro.c) ----
+// CTitle > three CTitleAnimated of 69x28 cells in the art font, one per layer of data/art/title.x in
+// draw order (traces, circuits, letters). Each keeps the art as loaded, before the animation:
+#define TITLE_LAYERS         0x6c         // CTitleAnimated: std::vector<ArtGrid*> (3)
+#define ARTGRID_W            0x00         // ArtGrid: i32 w, i32 h, cell* (column-major, CELL_SIZE each)
+#define ARTGRID_H            0x04
+#define ARTGRID_CELLS        0x08
+// CIntro (a direct child of XRoot): CText children are the lines and the 3x1 process cursors,
+// 1x8 Console children the rain. Both screens are found through the UI tree, so they need no addresses.
 
 // ---- current floor: knowledge, floor items, machines ----
 #define WORLD_KNOWN_W        0x674        // World: i32 width of the player's map memory (100 on -9)

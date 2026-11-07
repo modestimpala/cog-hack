@@ -4,6 +4,7 @@
 #include <string.h>
 #include "base/config.h"
 #include "base/log.h"
+#include "debug/record.h"
 #include "debug/snapshot.h"
 #include "hook/hotkeys.h"
 #include "hook/input.h"
@@ -12,14 +13,14 @@
 #include "script/script.h"
 
 // Hotkeys from config.txt (hotkey_*; defaults: Pause / Ctrl+F12 overlay, Ctrl+F9 console, Ctrl+F10
-// state dump, Ctrl+F11 snapshot, Ctrl+Shift+F11 UI capture). A key matches when its modifiers are
+// state dump, Ctrl+F11 snapshot, Ctrl+Shift+F11 UI capture, Ctrl+Shift+F10 UI recording). A key matches when its modifiers are
 // exactly the ones named. Returns 1 if the event was consumed (the game never sees it, nor its key-up).
-enum { HK_OVERLAY, HK_CONSOLE, HK_DUMP, HK_SNAPSHOT, HK_UI_CAPTURE, HK_COUNT };
+enum { HK_OVERLAY, HK_CONSOLE, HK_DUMP, HK_SNAPSHOT, HK_UI_CAPTURE, HK_UI_RECORD, HK_COUNT };
 static struct { int sym, mods; } g_keys[HK_COUNT][4];
 static int g_nkeys[HK_COUNT];
 
 void hotkeys_load(void) {
-    static const char *KEY[HK_COUNT] = { "hotkey_overlay", "hotkey_console", "hotkey_state_dump", "hotkey_snapshot", "hotkey_ui_capture" };
+    static const char *KEY[HK_COUNT] = { "hotkey_overlay", "hotkey_console", "hotkey_state_dump", "hotkey_snapshot", "hotkey_ui_capture", "hotkey_ui_record" };
     for (int a = 0; a < HK_COUNT; ++a) {
         const char *spec = cfg_str(KEY[a], "");
         g_nkeys[a] = 0;
@@ -57,6 +58,7 @@ int hotkeys_handle(const uint8_t *e) {
     case HK_DUMP:       state_dump(); break;
     case HK_SNAPSHOT:   snapshot_write(); break;
     case HK_UI_CAPTURE: ui_capture(); break;
+    case HK_UI_RECORD:  record_toggle(); break;
     default: return 0;
     }
     held = sym;

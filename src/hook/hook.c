@@ -12,13 +12,16 @@
 #include "base/config.h"
 #include "base/log.h"
 #include "debug/crash.h"
+#include "debug/record.h"
 #include "game/player.h"
 #include "game/version.h"
 #include "hook/hotkeys.h"
 #include "hook/input.h"
 #include "hook/sdl.h"
 #include "hook/ui_events.h"
+#include "overlay/intro.h"
 #include "overlay/overlay.h"
+#include "overlay/title.h"
 #include "script/plugin_host.h"
 #include "script/script.h"
 
@@ -81,11 +84,19 @@ static int frame(SDL_Surface *s) {
     init();
     game_tick();
     ++g_frames;
+    crash_phase("ui recording");
+    record_frame();
     crash_phase("onFrame script");
     script_frame();
     int drew = 0;
     crash_phase("overlay draw");
     if (s && overlay_visible()) { overlay_draw(s); drew = 1; }
+    crash_phase("title art");
+    if (title_draw(s)) drew = 1;
+    crash_phase("intro line");
+    if (intro_draw(s)) drew = 1;
+    crash_phase("ui recording bmp");
+    record_bmp();                              // after our drawing, so a recording's .bmp frames include it
     crash_phase("SDL present");                // the caller presents next; then back to the game
     return drew;
 }

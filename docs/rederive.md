@@ -80,9 +80,13 @@ Function names are Ghidra's (`FUN_<address>`) in Beta 17.1 build 260906a.
   matches for all of them.
 - **Who points at this?** `revpath.py snap.dmp <address> <levels>` walks pointers backwards until
   it reaches a static in .data. `ptrpath.py` goes forwards from statics.
+- **Animations**: `ui_record=<class>` in config.txt records a console's children every frame they
+  change (`hack\snapshots\rec_N.bin`); `tools/re/uirec.py` lists the changes, or iterate
+  `uirec.frames(path)` to get each frame's consoles and cells (`Console.cell(x, y)`).
 - **UI objects**: every UI console has a vtable whose RTTI names an `XConsole` subclass.
   `include/cm_ui.h` reads the tree; `replay.exe snap.dmp --ui` prints it.
-- **Screen text**: cells are 20 bytes, stored column by column (layout in `include/cogmind.h`).
-  Searching a snapshot for a line of on-screen text with that stride finds the console that drew it.
+- **Screen text**: cells are 20 bytes, stored column by column (layout in `include/cogmind.h`, the
+  REXPaint conventions behind it in [art.md](art.md)). Searching a snapshot for a line of
+  on-screen text with that stride finds the console that drew it.
 - `tools/re/minidump.py` reads snapshots from Python (`Dump(path).read(va, n)`, `.find(bytes)`,
   `.msvc_string(va)`).

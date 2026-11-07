@@ -35,11 +35,23 @@ static const setting SETTINGS[] = {
     { NULL, "hotkey_state_dump", "ctrl+f10", "text dump of player, items, bots" },
     { NULL, "hotkey_snapshot", "ctrl+f11", "memory snapshot + .txt screen text + .bmp screen" },
     { NULL, "hotkey_ui_capture", "ctrl+shift+f11", "UI text only (screen, hover, UI tree): instant, never pruned" },
+    { NULL, "hotkey_ui_record", "ctrl+shift+f10", "start / stop a UI recording of the ui_record console" },
 
     { "Snapshots (hack\\snapshots)", "snapshot_keep", "3", "keep the newest N memory snapshots (0 = all); .txt files are never deleted" },
     { NULL, "snapshot_full", "0", "1 = full memory incl. mapped images (much bigger files)" },
     { NULL, "snapshot_bmp", "1", "also save the screen as snap_N.bmp" },
     { NULL, "crash_report", "1", "on a crash: a report in hook.log and hack\\snapshots\\crash_N.dmp" },
+    { NULL, "ui_record", "", "record the cells of this console's children every frame they change, e.g. CTitle (rec_N.bin)" },
+    { NULL, "ui_record_max_s", "30", "stop a UI recording after this many seconds" },
+    { NULL, "ui_record_bmp", "0", "while recording, also save the screen as .bmp every N frames (0 = never)" },
+
+    { "Title screen and boot sequence (cog-hack's mark on them)", "title_art", "1", "1 = once the title logo is lit, it glitches into our COG-HACK (art/coghack.txt)" },
+    { NULL, "intro_line", "1", "1 = the new-game boot sequence gets a cog-hack line" },
+    { NULL, "intro_after", "PREPARING CONTROL OVERLAY", "the game's line it is typed below" },
+    { NULL, "intro_text", "INJECTING COG-HACK", "our line" },
+    { NULL, "intro_tag", "ACTIVE", "the status box after it (empty = none)" },
+    { NULL, "intro_alert", "0", "1 = red alert box like VIRUS DETECTED instead of the green okay box" },
+    { NULL, "intro_process_ms", "600", "how long the process cursor runs before the box" },
 
     { "Developer", "dev_mode", "0", "1 = peek()/poke(), set_core() and the other stat setters, writes to read-only/code memory" },
 };

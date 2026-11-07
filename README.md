@@ -92,6 +92,7 @@ Everything the mod writes goes in `<game>\hack\`: `hook.log`, `config.txt`, `plu
 | Ctrl+F10 | text dump of the player, items and robots |
 | Ctrl+F11 | memory snapshot, plus the screen as text and as a .bmp |
 | Ctrl+Shift+F11 | screen text and UI tree only (fast, never deleted) |
+| Ctrl+Shift+F10 | start or stop a UI recording of the `ui_record` console (see below) |
 
 ### Enabling plugins
 
@@ -113,6 +114,18 @@ If the game crashes, `hook.log` gets a short report: where it crashed, whether t
 was running at the time, and the last commands and key presses. A minidump goes to
 `hack\snapshots\crash_N.dmp`. The previous session's log is kept as `hook.prev.log`.
 
+### Title screen and boot sequence
+
+cog-hack leaves its mark on two of the game's screens:
+
+- **Title screen:** once the Cogmind logo has finished drawing, it glitches and turns into the
+  COG-HACK logo. Set `title_art=0` to turn this off.
+- **New game:** the boot sequence gets one extra line after PREPARING CONTROL OVERLAY,
+  `INJECTING COG-HACK`, typed like the game's own lines and ending in an `ACTIVE` box. The
+  `intro_*` settings change the text, which line it follows, or turn it off.
+
+The logo art is `art/coghack.txt`. [docs/art.md](docs/art.md) explains how both screens work and
+how to edit the art.
 
 Settings are in `hack\config.txt`, written with comments on first launch. You can change the
 hotkeys there (for example `hotkey_console=ctrl+f9, f8`). When a new version adds settings, the file
@@ -143,6 +156,13 @@ Helper headers for plugins (header-only, read-only):
 - `cm_addr.h`: call `cm_addr_init(api)` so the plugin uses the addresses the host found
 
 Plugins only load if they are listed in `hack\plugins.txt` (see "Enabling plugins").
+
+## UI recordings
+
+For reverse engineering animations: set `ui_record=CTitle` (any console class) and the hook writes
+the cells of that console's children on every frame they change, from the moment it appears, to
+`hack\snapshots\rec_N.bin`, plus the screen as `.bmp` every `ui_record_bmp` frames.
+`tools/re/uirec.py rec_N.bin` prints what changed when, and `from uirec import frames` reads it.
 
 ## UI coordinates
 
@@ -182,8 +202,9 @@ sigs/          byte signatures (built in, and the format for hack\sigs.txt)
 plugins/       example plugins: example, ui_inspect
 scripts/       scripts installed to hack\scripts
 tests/         offline tests; replay.c runs the plugin headers against a snapshot
-tools/         build helpers; tools/re/ has the reverse engineering scripts
-docs/          scripting.md (the script API), rederive.md
+art/           the COG-HACK title art (text; tools/title_art.py builds it in)
+tools/         build helpers; tools/re/ has the reverse engineering scripts (uirec.py reads UI recordings)
+docs/          scripting.md (the script API), rederive.md, art.md (REXPaint conventions, the title and boot animations)
 ```
 
 ## Credits
