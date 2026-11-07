@@ -1,0 +1,4 @@
+overlay=1
+dev_mode=0
+script_timeout_ms=100
+console_timeout_ms=300
